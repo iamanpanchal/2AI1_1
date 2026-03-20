@@ -1,28 +1,15 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+df=pd.read_csv('insurance_data_linear.csv')
+df.head()
+df.info()
+le=LabelEncoder()
+#This creates a tool that converts labels - numbers
 
-# --- SECTION 1: LOAD DATA --
-df = pd.read_csv('insurance_data_linear.csv')
+df['sex']=le.fit_transform(df['sex'])
+df['smoker']=le.fit_transform(df['smoker'])
+df['region']=le.fit_transform(df['region'])
 
-print("Dataset loaded successfully!")
-print(f"Shape of dataset: {df.shape}")
+# fit_transform(): learns categories and converts them into numbers
+
 print(df.head())
-
-import pandas as pd
-from sklearn.preprocessing import StandardScaler
-
-# Load dataset
-data = pd.read_csv("insurance_data_linear.csv")
-
-# Select numerical features to scale
-numerical_features = ["age", "bmi"]
-
-# Apply scaling
-scaler = StandardScaler()
-data[numerical_features] = scaler.fit_transform(data[numerical_features])
-
-# Check result
-print("Scaled values of Age and BMI:")
-print(data[["age", "bmi"]].head())
