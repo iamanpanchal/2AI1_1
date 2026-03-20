@@ -39,4 +39,7 @@ Our team used a structured Git workflow:
 * Peer reviews were conducted before merging into the `main` branch.
 
 ## 💡 Conclusion
+
+The Linear Regression model successfully predicts medical costs with an accuracy of [X]%. Smoking status and BMI were found to be the most significant factors in determining insurance charges.
+=======
 The Linear Regression model successfully predicts medical costs with an accuracy of [X]%. Smoking status and BMI were found to be the most significant factors in determining insurance charges.
