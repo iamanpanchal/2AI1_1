@@ -32,3 +32,11 @@ print(df.head())
 # Member 3: Converting words to numbers (Encoding)
 df = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
 print("Categorical variables encoded")
+# Member 7: Evaluation
+
+from sklearn.metrics import r2_score, mean_squared_error
+
+y_pred = model.predict(X_test)
+
+print("R2 Score:", r2_score(y_test, y_pred))
+print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
