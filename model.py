@@ -1,15 +1,13 @@
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-df=pd.read_csv('insurance_data_linear.csv')
-df.head()
-df.info()
-le=LabelEncoder()
-#This creates a tool that converts labels - numbers
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-df['sex']=le.fit_transform(df['sex'])
-df['smoker']=le.fit_transform(df['smoker'])
-df['region']=le.fit_transform(df['region'])
+# --- SECTION 1: LOAD DATA ---
+# This part belongs to Member 1 (Lead)
+df = pd.read_csv('insurance_data_linear.csv')
 
-# fit_transform(): learns categories and converts them into numbers
-
+print("Dataset loaded successfully!")
+print(f"Shape of dataset: {df.shape}")
 print(df.head())
+
