@@ -32,6 +32,15 @@ print(df.head())
 # Member 3: Converting words to numbers (Encoding)
 df = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
 print("Categorical variables encoded")
+
+# Member 5: Splitting the data
+from sklearn.model_selection import train_test_split
+
+X = df.drop('charges', axis=1)
+y = df['charges']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"Data split: {len(X_train)} train samples, {len(X_test)} test samples")
+
 # Member 7: Evaluation
 
 from sklearn.metrics import r2_score, mean_squared_error
