@@ -13,7 +13,6 @@ from sklearn.metrics import r2_score, mean_squared_error
 df = pd.read_csv('insurance_data_linear.csv')
 print("Dataset loaded successfully!")
 print(f"Shape of dataset: {df.shape}")
-print(df.head())
 
 # ==========================================
 # MEMBER 2: EDA (Visualizations)

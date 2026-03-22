@@ -1,5 +1,5 @@
 # Medical Cost Prediction using Linear Regression
-**Team Number:** 1  
+**Team Number:** 1  2AI1_1
 **Project Objective:** Predict individual medical costs billed by health insurance.
 
 ## 👥 Team Members
@@ -18,25 +18,27 @@ The goal of this project is to use a Linear Regression model to predict the `cha
 
 ## 📊 Dataset Description
 The dataset used is the **Medical Cost Personal Dataset**. It contains 1,338 rows of data with the following features:
-* **Age, Sex, BMI, Children, Smoker, Region** (Input features)
+* **Age, Sex, BMI, Children, Smoker, Region** (Input features of the collected data of my team)
 * **Charges** (Target variable we are predicting)
 
 ## ⚙️ Data Preprocessing Steps
-1. **Loading:** Data was imported from a CSV file.
+1. **Loading:** Data was imported from a CSV file. (filed and reegistered by team Lead)
 2. **Encoding:** Categorical variables (Sex, Smoker, Region) were converted to numerical values using One-Hot Encoding.
 3. **Scaling:** Numerical features like Age and BMI were standardized using `StandardScaler`.
 4. **Splitting:** The data was split into 80% Training and 20% Testing sets.
 
 ## 🤖 Model & Results
 * **Model used:** Scikit-Learn Linear Regression.
-* **Evaluation Metrics:** * Mean Squared Error (MSE): [Insert result here, e.g., 33,596,915]
-  * R-squared ($R^2$) Score: [Insert result here, e.g., 0.78]
+* **Evaluation Metrics:** * Mean Squared Error (MSE): 33596915.85
+  * R-squared ($R^2$) Score: 0.7836
 
 ## 🤝 GitHub Collaboration Summary
 Our team used a structured Git workflow:
 * Each member worked on a dedicated **Feature Branch**.
 * We utilized **Pull Requests** for every code addition.
-* Peer reviews were conducted before merging into the `main` branch.
+* Peer reviews were conducted by Mufaddal (lead) before merging into the `main` branch.
 
 ## 💡 Conclusion
-The Linear Regression model successfully predicts medical costs with an accuracy of [X]%. Smoking status and BMI were found to be the most significant factors in determining insurance charges.
+
+The Linear Regression model successfully predicts medical costs with an accuracy of 78.36%. Smoking status and BMI were found to be the most significant factors in determining insurance charges.
+=======
