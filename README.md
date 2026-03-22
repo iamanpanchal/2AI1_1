@@ -30,7 +30,7 @@ The dataset used is the **Medical Cost Personal Dataset**. It contains 1,338 row
 ## 🤖 Model & Results
 * **Model used:** Scikit-Learn Linear Regression.
 * **Evaluation Metrics:** * Mean Squared Error (MSE): 33596915.85
-  * R-squared ($R^2$) Score: 0.7836
+* **R-squared ($R^2$) Score: 0.7836
 
 ## 🤝 GitHub Collaboration Summary
 Our team used a structured Git workflow:
