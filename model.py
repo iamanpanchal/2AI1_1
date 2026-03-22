@@ -1,65 +1,85 @@
 import pandas as pd
-import matplotlib.pyplot as plt 
 import numpy as np
+import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
 # ==========================================
-# MEMBER 1: LOAD DATA (Team Lead)
+# MEMBER 1: Data Loading (Team Lead)
 # ==========================================
 df = pd.read_csv('insurance_data_linear.csv')
-print("Dataset loaded successfully!")
-print(f"Shape of dataset: {df.shape}")
+print("--- Step 1: Data Loaded ---")
+print(df.head())
 
 # ==========================================
-# MEMBER 2: EDA (Visualizations)
+# MEMBER 2: Exploratory Data Analysis (EDA)
 # ==========================================
-plt.figure(figsize=(10,6))
-sns.histplot(df['charges'], kde=True, color='blue')
-plt.title('Distribution of Insurance Charges')
-plt.savefig('distribution.png') 
-# plt.show() # Uncomment if working in Colab
-print("EDA Visualizations created")
+# Visualize the distribution of the target variable 'charges'
+plt.figure(figsize=(8, 5))
+sns.histplot(df['charges'], kde=True, color='skyblue')
+plt.title('Distribution of Medical Insurance Charges')
+plt.xlabel('Charges')
+plt.ylabel('Frequency')
+plt.show()
 
 # ==========================================
-# MEMBER 3: ENCODING (Categorical to Numeric)
+# MEMBER 3: Categorical Encoding
 # ==========================================
-# Convert sex, smoker, and region into numbers
+# Convert text columns (sex, smoker, region) into numerical values
 df = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
-print("Categorical variables encoded")
+print("\n--- Step 3: Encoding Complete ---")
+print(df.head())
 
 # ==========================================
-# MEMBER 4: SCALING (Standardization)
+# MEMBER 4: Feature Scaling
 # ==========================================
+# Scale numerical columns so they have a similar range
 scaler = StandardScaler()
 num_cols = ['age', 'bmi', 'children']
 df[num_cols] = scaler.fit_transform(df[num_cols])
-print("Features scaled using StandardScaler")
+print("\n--- Step 4: Feature Scaling Complete ---")
 
 # ==========================================
-# MEMBER 5: SPLITTING (Train/Test)
+# MEMBER 5: Data Splitting
 # ==========================================
+# Split the data into features (X) and target (y)
 X = df.drop('charges', axis=1)
 y = df['charges']
 
+# 80% Training and 20% Testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-print(f"Data split: {len(X_train)} train samples, {len(X_test)} test samples")
+print(f"\n--- Step 5: Data Split (Train: {len(X_train)}, Test: {len(X_test)}) ---")
 
 # ==========================================
-# MEMBER 6: TRAINING (Linear Regression)
+# MEMBER 6: Model Training
 # ==========================================
+# Initialize and train the Linear Regression model
 model = LinearRegression()
 model.fit(X_train, y_train)
-print("Model training complete")
+print("\n--- Step 6: Model Training Complete ---")
 
 # ==========================================
-# MEMBER 7: EVALUATION (Metrics)
+# MEMBER 7: Evaluation & Results
 # ==========================================
+# Make predictions on the test set
 y_pred = model.predict(X_test)
 
-print("\n--- FINAL RESULTS ---")
-print("R2 Score:", r2_score(y_test, y_pred))
-print("Mean Squared Error:", mean_squared_error(y_test, y_pred))
+# Calculate metrics
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("\n--- FINAL MODEL EVALUATION ---")
+print(f"Mean Squared Error (MSE): {mse:.2f}")
+print(f"R-squared (R2) Score: {r2:.4f}")
+
+# Optional: Visualization of Actual vs Predicted
+plt.figure(figsize=(8, 5))
+plt.scatter(y_test, y_pred, alpha=0.5, color='orange')
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=2)
+plt.xlabel('Actual Charges')
+plt.ylabel('Predicted Charges')
+plt.title('Actual vs Predicted Insurance Charges')
+plt.show()
