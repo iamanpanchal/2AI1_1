@@ -5,14 +5,21 @@ from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
 
-# Load Clean Data
-df = pd.read_csv('insurance_data_linear.csv')
-df_encoded = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
-X = df_encoded.drop('charges', axis=1)
-y = df_encoded['charges']
-
-model = LinearRegression()
-model.fit(X, y)
+# --- LOAD AND PREPARE MODEL ---
+try:
+    # Use 'on_bad_lines' to skip any conflict markers automatically
+    df = pd.read_csv('insurance_data_linear.csv', on_bad_lines='skip')
+    
+    # Preprocessing
+    df_encoded = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
+    X = df_encoded.drop('charges', axis=1)
+    y = df_encoded['charges']
+    
+    model = LinearRegression()
+    model.fit(X, y)
+    print("Model trained successfully!")
+except Exception as e:
+    print(f"Error during training: {e}")
 
 @app.route('/')
 def home():
@@ -21,14 +28,19 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        data = [float(request.form['age']), float(request.form['bmi']), float(request.form['children'])]
-        smoker = 1 if request.form['smoker'] == 'yes' else 0
-        # Placeholder for other encoded columns
-        final_features = data + [0, smoker, 0, 0, 0] 
-        prediction = model.predict([final_features])[0]
-        return render_template('index.html', prediction_text=f'Cost: ${prediction:,.2f}')
+        # Get data from user
+        age = float(request.form['age'])
+        bmi = float(request.form['bmi'])
+        children = float(request.form['children'])
+        smoker_yes = 1 if request.form['smoker'] == 'yes' else 0
+        
+        # We create a simple prediction based on the expected columns
+        # [age, bmi, children, sex_male, smoker_yes, region_northwest, region_southeast, region_southwest]
+        prediction = model.predict([[age, bmi, children, 0, smoker_yes, 0, 0, 0]])[0]
+        
+        return render_template('index.html', prediction_text=f'Estimated Cost: ${prediction:,.2f}')
     except Exception as e:
-        return render_template('index.html', prediction_text=f'Error: {str(e)}')
+        return render_template('index.html', prediction_text=f"Calculation Error: {str(e)}")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
