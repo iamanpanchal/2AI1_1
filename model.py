@@ -7,16 +7,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
-# ==========================================
+
 # MEMBER 1: Data Loading (Team Lead)
-# ==========================================
+
 df = pd.read_csv('insurance_data_linear.csv')
 print("--- Step 1: Data Loaded ---")
 print(df.head())
 
-# ==========================================
+
 # MEMBER 2: Exploratory Data Analysis (EDA)
-# ==========================================
+
 # Visualize the distribution of the target variable 'charges'
 plt.figure(figsize=(8, 5))
 sns.histplot(df['charges'], kde=True, color='skyblue')
@@ -25,26 +25,26 @@ plt.xlabel('Charges')
 plt.ylabel('Frequency')
 plt.show()
 
-# ==========================================
+
 # MEMBER 3: Categorical Encoding
-# ==========================================
+
 # Convert text columns (sex, smoker, region) into numerical values
 df = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
-print("\n--- Step 3: Encoding Complete ---")
+print("\n Step 3: Encoding Complete ")
 print(df.head())
 
-# ==========================================
+
 # MEMBER 4: Feature Scaling
-# ==========================================
+
 # Scale numerical columns so they have a similar range
 scaler = StandardScaler()
 num_cols = ['age', 'bmi', 'children']
 df[num_cols] = scaler.fit_transform(df[num_cols])
-print("\n--- Step 4: Feature Scaling Complete ---")
+print("\n Step 4: Feature Scaling Complete ")
 
-# ==========================================
+
 # MEMBER 5: Data Splitting
-# ==========================================
+
 # Split the data into features (X) and target (y)
 X = df.drop('charges', axis=1)
 y = df['charges']
@@ -53,17 +53,17 @@ y = df['charges']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 print(f"\n--- Step 5: Data Split (Train: {len(X_train)}, Test: {len(X_test)}) ---")
 
-# ==========================================
+
 # MEMBER 6: Model Training
-# ==========================================
+
 # Initialize and train the Linear Regression model
 model = LinearRegression()
 model.fit(X_train, y_train)
 print("\n--- Step 6: Model Training Complete ---")
 
-# ==========================================
+
 # MEMBER 7: Evaluation & Results
-# ==========================================
+
 # Make predictions on the test set
 y_pred = model.predict(X_test)
 
