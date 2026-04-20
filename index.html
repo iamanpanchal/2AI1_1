@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insurance Predictor</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        form { display: inline-block; text-align: left; border: 1px solid #ccc; padding: 20px; }
+        input, select { margin-bottom: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+    <h2>Medical Insurance Cost Predictor</h2>
+    <form action="/predict" method="post">
+        Age: <input type="number" name="age" required><br>
+        BMI: <input type="number" step="0.1" name="bmi" required><br>
+        Children: <input type="number" name="children" required><br>
+        Smoker: 
+        <select name="smoker">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select><br>
+        <button type="submit">Predict Cost</button>
+    </form>
+    <h3>{{ prediction_text }}</h3>
+</body>
+</html>
