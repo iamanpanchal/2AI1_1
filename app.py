@@ -1,25 +1,31 @@
 import os
 import pandas as pd
+import numpy as np
 from flask import Flask, render_template, request
 from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
 
 # --- LOAD AND PREPARE MODEL ---
-try:
-    # Use 'on_bad_lines' to skip any conflict markers automatically
+# We use a global variable for the model and the columns it expects
+model = None
+model_columns = None
+
+def train_model():
+    global model, model_columns
+    # Skip bad lines to avoid merge conflict errors
     df = pd.read_csv('insurance_data_linear.csv', on_bad_lines='skip')
+    df_encoded = pd.get_dummies(df, drop_first=True)
     
-    # Preprocessing
-    df_encoded = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
     X = df_encoded.drop('charges', axis=1)
     y = df_encoded['charges']
     
     model = LinearRegression()
     model.fit(X, y)
-    print("Model trained successfully!")
-except Exception as e:
-    print(f"Error during training: {e}")
+    model_columns = list(X.columns)
+    print("Model trained and columns saved!")
+
+train_model()
 
 @app.route('/')
 def home():
@@ -28,19 +34,30 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Get data from user
-        age = float(request.form['age'])
-        bmi = float(request.form['bmi'])
-        children = float(request.form['children'])
-        smoker_yes = 1 if request.form['smoker'] == 'yes' else 0
+        # 1. Get data from user form
+        input_dict = {
+            'age': float(request.form['age']),
+            'bmi': float(request.form['bmi']),
+            'children': float(request.form['children']),
+            'smoker_yes': 1 if request.form['smoker'] == 'yes' else 0
+        }
         
-        # We create a simple prediction based on the expected columns
-        # [age, bmi, children, sex_male, smoker_yes, region_northwest, region_southeast, region_southwest]
-        prediction = model.predict([[age, bmi, children, 0, smoker_yes, 0, 0, 0]])[0]
+        # 2. Create a DataFrame with all expected columns initialized to 0
+        input_df = pd.DataFrame(0, index=[0], columns=model_columns)
         
-        return render_template('index.html', prediction_text=f'Estimated Cost: ${prediction:,.2f}')
+        # 3. Fill in the values we have
+        for col in input_dict:
+            if col in input_df.columns:
+                input_df[col] = input_dict[col]
+        
+        # 4. Predict
+        prediction = model.predict(input_df)[0]
+        
+        return render_template('index.html', prediction_text=f'Estimated Insurance Cost: ${prediction:,.2f}')
+    
     except Exception as e:
-        return render_template('index.html', prediction_text=f"Calculation Error: {str(e)}")
+        # This will show the actual error on your webpage so you can debug
+        return render_template('index.html', prediction_text=f"System Error: {str(e)}")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
